@@ -2,9 +2,10 @@
   "name": "adapt-progress-score",
   "version": "1.0.0",
   "framework": "^2.0.0",
+  "homepage": "https://github.com/canvasplay/adapt-progress-score",
   "displayName" : "Progress Score",
   "extension" : "progressScore",
-  "description": "An extension wich save progress as course score",
+  "description": "An extension which saves course progress as course score",
   "main": "/js/adapt-progress-score.js",
   "keywords": [
     "adapt-plugin",
