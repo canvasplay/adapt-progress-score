@@ -1,0 +1,15 @@
+{
+  "name": "adapt-progress-score",
+  "version": "1.0.0",
+  "framework": "^2.0.0",
+  "displayName" : "Progress Score",
+  "extension" : "progressScore",
+  "description": "An extension wich save progress as course score",
+  "main": "/js/adapt-progress-score.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-extension"
+  ],
+  "license": "GPLv3",
+  "targetAttribute": "_progressScore"
+}
