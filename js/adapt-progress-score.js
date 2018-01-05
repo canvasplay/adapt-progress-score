@@ -2,11 +2,42 @@ define([
     'coreJS/adapt'
 ], function (Adapt) {
 
-    var calculateProgress = function(model) {
+    var onDataReady = function(){
+
+        //listen for blocks completion events
+        Adapt.blocks.on('change:_isComplete', updateProgress);
+
+    }
+
+    var updateProgress = function(model) {
 
         var course = Adapt.course;
+        var currentProgress = parseInt(Adapt.offlineStorage.get('score'));
 
-        var getModelTree = function (m) {
+        //ignore if progress is already 100
+        if(currentProgress && currentProgress===100)
+            return;
+
+        //get blocks list
+        var blocks = Adapt.blocks;
+
+        //get complete values array
+        var values = _.countBy(blocks.pluck('_isComplete'));
+
+        //count completed ones
+        var completed = values['true'] || 0;
+
+         //calculate progress
+        var progress = Math.floor(completed * 100 / blocks.length);
+
+        //set new calculated progress only if is greater than current
+        if(!currentProgress || progress > currentProgress)
+            Adapt.offlineStorage.set("score", progress, 0, 100);
+
+        /*
+        
+        Experimenting with a more detailed progress calculation
+        var getProgressTree = function (m) {
 
             //create data model
             var obj = {
@@ -20,14 +51,14 @@ define([
             var children = [];
             var c = m.getChildren().models;
             for (var i = 0; i < c.length; i++) {
-                children.push(getModelTree(c[i]));
+                children.push(getProgressTree(c[i]));
             }
 
             //group children by completed and not completed
             var groups = _.groupBy(c, function (m) { return m.get('_isComplete') });
 
             //calculate progress
-            var p = (groups['true']) ? groups['true'].length * 100 / children.length : 0;
+            var p = (groups['true']) ? Math.floor(groups['true'].length / children.length) * 100 : 0;
 
             return {
                 type: m.get('_type'),
@@ -37,13 +68,13 @@ define([
             };
         }
 
-        var tree = getModelTree(course);
-        //console.log(tree);
-        Adapt.offlineStorage.set("score", tree.progress, 0, 100);
+        var tree = getProgressTree(course);
+        console.log(tree);
+        
+        */
 
     }
 
-    Adapt.on('router:page', calculateProgress);
-    Adapt.on('router:menu', calculateProgress);
+    Adapt.on('app:dataReady', onDataReady);
 
 });
