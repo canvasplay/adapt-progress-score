@@ -21,14 +21,17 @@ define([
         //get blocks list
         var blocks = Adapt.blocks;
 
-        //get complete values array
-        var values = _.countBy(blocks.pluck('_isComplete'));
+        //exclude optional blocks
+        var non_optional_blocks = blocks.filter(function(m){ return !m.get('_isOptional') });
+
+        //get completion values as array
+        var values = _.countBy(_.map(non_optional_blocks, function(m){ return m.get('_isComplete') }));
 
         //count completed ones
         var completed = values['true'] || 0;
 
          //calculate progress
-        var progress = Math.floor(completed * 100 / blocks.length);
+        var progress = Math.floor(completed * 100 / non_optional_blocks.length);
 
         //set new calculated progress only if is greater than current
         if(!currentProgress || progress > currentProgress)
