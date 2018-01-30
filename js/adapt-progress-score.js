@@ -24,7 +24,7 @@ define([
         //exclude optional blocks
         var non_optional_blocks = blocks.filter(function(m){ return !m.get('_isOptional') });
 
-        //get completion values as array
+        //get completion values as counted array
         var values = _.countBy(_.map(non_optional_blocks, function(m){ return m.get('_isComplete') }));
 
         //count completed ones
